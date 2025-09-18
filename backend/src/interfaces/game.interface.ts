@@ -3,6 +3,7 @@ export interface Question {
   text: string;
   options: string[];
   correctAnswer: number;
+  correctAnswerContext: string;
   timeLimit: number; // em segundos
 }
 
@@ -11,6 +12,7 @@ export interface Player {
   name: string;
   score: number;
   isHost: boolean;
+  avatar: string;
 }
 
 export interface Game {

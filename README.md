@@ -6,9 +6,14 @@ Um jogo de perguntas e respostas em tempo real estilo Kahoot, desenvolvido com N
 
 - **Criação de Jogos**: Host pode criar um jogo e obter um código único
 - **Entrada de Jogadores**: Jogadores podem entrar usando o código do jogo
-- **Perguntas em Tempo Real**: Sistema de perguntas com timer
+- **Perguntas Embaralhadas**: Perguntas e opções são embaralhadas aleatoriamente
+- **Header do Jogador**: Nome do jogador, pontuação e código do jogo sempre visíveis
+- **Perguntas em Tempo Real**: Sistema de perguntas com timer visual
+- **Confirmação de Resposta**: Botão de confirmação para evitar envios acidentais
+- **Estatísticas de Resposta**: Mostra quantos jogadores já responderam em tempo real
 - **Sistema de Pontuação**: Pontos baseados em acertos e velocidade de resposta
 - **Leaderboard**: Ranking em tempo real dos jogadores
+- **Impressão de Resultados**: Botão para imprimir o resultado final formatado
 - **Interface Responsiva**: Funciona em desktop e mobile
 
 ## 🛠️ Tecnologias Utilizadas

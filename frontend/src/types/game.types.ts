@@ -3,6 +3,7 @@ export interface Question {
   text: string;
   options: string[];
   correctAnswer?: number;
+  correctAnswerContext?: string;
   timeLimit: number;
 }
 
@@ -11,6 +12,13 @@ export interface Player {
   name: string;
   score: number;
   isHost: boolean;
+  avatar: string;
+}
+
+export interface AnswerStats {
+  total: number;
+  answered: number;
+  pending: number;
 }
 
 export interface Game {
@@ -30,10 +38,12 @@ export interface GameContextType {
   isConnected: boolean;
   isHost: boolean;
   leaderboard: Player[];
+  showingResults: boolean;
+  answerStats: AnswerStats | null;
   
   // Actions
-  createGame: (hostName: string) => void;
-  joinGame: (gameId: string, playerName: string) => void;
+  createGame: (hostName: string, avatar?: string) => void;
+  joinGame: (gameId: string, playerName: string, avatar?: string) => void;
   startGame: () => void;
   nextQuestion: () => void;
   submitAnswer: (questionId: string, answer: number) => void;

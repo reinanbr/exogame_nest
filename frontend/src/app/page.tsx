@@ -7,7 +7,7 @@ import QuestionView from '@/components/QuestionView';
 import Leaderboard from '@/components/Leaderboard';
 
 export default function Home() {
-  const { game, currentQuestion, leaderboard } = useGame();
+  const { game, currentQuestion, showingResults } = useGame();
 
   // Não tem jogo ativo - mostrar tela inicial
   if (!game) {
@@ -19,11 +19,23 @@ export default function Home() {
     return <Lobby />;
   }
 
-  // Jogo em andamento com pergunta atual - mostrar pergunta
-  if (game.status === 'playing' && currentQuestion && leaderboard.length === 0) {
-    return <QuestionView />;
+  // Jogo finalizado - sempre mostrar leaderboard final
+  if (game.status === 'finished') {
+    return <Leaderboard />;
   }
 
-  // Mostrar resultados/leaderboard
-  return <Leaderboard />;
+  // Jogo em andamento
+  if (game.status === 'playing') {
+    // Se está mostrando resultados = mostrar leaderboard
+    if (showingResults) {
+      return <Leaderboard />;
+    }
+    // Se tem pergunta atual = mostrar pergunta
+    if (currentQuestion) {
+      return <QuestionView />;
+    }
+  }
+
+  // Fallback - mostrar lobby
+  return <Lobby />;
 }

@@ -5,7 +5,7 @@ import { useGame } from '@/contexts/GameContext';
 import PlayerHeader from './PlayerHeader';
 
 export default function QuestionView() {
-  const { currentQuestion, submitAnswer, isHost, showResults, game, answerStats } = useGame();
+  const { currentQuestion, submitAnswer, isHost, showResults, game } = useGame();
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [hasAnswered, setHasAnswered] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
@@ -67,26 +67,6 @@ export default function QuestionView() {
               ></div>
             </div>
           </div>
-
-          {/* Estatísticas de Respostas */}
-          {answerStats && (
-            <div className="mb-6 bg-blue-50 rounded-lg p-4">
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-blue-700">
-                  📊 Respostas: {answerStats.answered}/{answerStats.total}
-                </span>
-                <span className="text-blue-600">
-                  {answerStats.pending > 0 ? `${answerStats.pending} aguardando` : 'Todos responderam'}
-                </span>
-              </div>
-              <div className="w-full bg-blue-200 rounded-full h-2 mt-2">
-                <div
-                  className="h-2 bg-blue-500 rounded-full transition-all duration-500"
-                  style={{ width: `${(answerStats.answered / answerStats.total) * 100}%` }}
-                ></div>
-              </div>
-            </div>
-          )}
 
           {/* Question */}
           <div className="text-center mb-8">

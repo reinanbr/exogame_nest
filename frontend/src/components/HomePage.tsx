@@ -2,11 +2,13 @@
 
 import { useState } from 'react';
 import { useGame } from '@/contexts/GameContext';
+import AvatarSelector from './AvatarSelector';
 
 export default function HomePage() {
   const [hostName, setHostName] = useState('');
   const [gameId, setGameId] = useState('');
   const [playerName, setPlayerName] = useState('');
+  const [selectedAvatar, setSelectedAvatar] = useState('🐻');
   const [mode, setMode] = useState<'menu' | 'create' | 'join'>('menu');
   
   const { createGame, joinGame, isConnected } = useGame();
@@ -14,14 +16,14 @@ export default function HomePage() {
   const handleCreateGame = (e: React.FormEvent) => {
     e.preventDefault();
     if (hostName.trim()) {
-      createGame(hostName.trim());
+      createGame(hostName.trim(), selectedAvatar);
     }
   };
 
   const handleJoinGame = (e: React.FormEvent) => {
     e.preventDefault();
     if (gameId.trim() && playerName.trim()) {
-      joinGame(gameId.trim().toUpperCase(), playerName.trim());
+      joinGame(gameId.trim().toUpperCase(), playerName.trim(), selectedAvatar);
     }
   };
 
@@ -77,6 +79,12 @@ export default function HomePage() {
                 required
               />
             </div>
+            
+            <AvatarSelector 
+              selectedAvatar={selectedAvatar}
+              onAvatarSelect={setSelectedAvatar}
+            />
+            
             <div className="flex space-x-2">
               <button
                 type="button"
@@ -126,6 +134,12 @@ export default function HomePage() {
                 required
               />
             </div>
+            
+            <AvatarSelector 
+              selectedAvatar={selectedAvatar}
+              onAvatarSelect={setSelectedAvatar}
+            />
+            
             <div className="flex space-x-2">
               <button
                 type="button"

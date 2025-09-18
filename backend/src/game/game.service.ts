@@ -13,9 +13,9 @@ export class GameService {
     private playerService: PlayerService,
   ) {}
 
-  createGame(hostId: string, hostName: string): Game {
+  createGame(hostId: string, hostName: string, avatar?: string): Game {
     const gameId = this.generateGameId();
-    const host = this.playerService.createPlayer(hostId, hostName, true);
+    const host = this.playerService.createPlayer(hostId, hostName, true, avatar);
     const questions = this.questionService.getRandomQuestions(5);
 
     const game: Game = {
@@ -32,13 +32,13 @@ export class GameService {
     return game;
   }
 
-  joinGame(gameId: string, playerId: string, playerName: string): { game: Game; player: Player } | null {
+  joinGame(gameId: string, playerId: string, playerName: string, avatar?: string): { game: Game; player: Player } | null {
     const game = this.games.get(gameId);
     if (!game || game.status !== 'waiting') {
       return null;
     }
 
-    const player = this.playerService.createPlayer(playerId, playerName);
+    const player = this.playerService.createPlayer(playerId, playerName, false, avatar);
     game.players.push(player);
     this.games.set(gameId, game);
 
@@ -113,7 +113,16 @@ export class GameService {
       const timeTaken = (new Date().getTime() - game.currentQuestionStartTime!.getTime()) / 1000;
       const timeBonus = Math.max(0, currentQuestion.timeLimit - timeTaken);
       const points = Math.round(1000 + (timeBonus * 10));
+      
+      // Atualizar pontuação no PlayerService
       this.playerService.updatePlayerScore(playerId, points);
+      
+      // Atualizar pontuação também no jogo
+      const playerInGame = game.players.find(p => p.id === playerId);
+      if (playerInGame) {
+        playerInGame.score += points;
+        this.games.set(gameId, game);
+      }
     }
 
     return true;
@@ -141,6 +150,26 @@ export class GameService {
       return [];
     }
     return [...game.players].sort((a, b) => b.score - a.score);
+  }
+
+  getAnswerStats(gameId: string, questionId: string): { total: number; answered: number; pending: number } {
+    const game = this.games.get(gameId);
+    if (!game) {
+      return { total: 0, answered: 0, pending: 0 };
+    }
+
+    const gameAnswers = this.playerAnswers.get(gameId) || [];
+    const answersForQuestion = gameAnswers.filter(answer => answer.questionId === questionId);
+    
+    return {
+      total: game.players.length,
+      answered: answersForQuestion.length,
+      pending: game.players.length - answersForQuestion.length,
+    };
+  }
+
+  getAvailableAvatars(): string[] {
+    return this.playerService.getAvailableAvatars();
   }
 
   private generateGameId(): string {

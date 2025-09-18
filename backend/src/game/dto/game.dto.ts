@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class JoinGameDto {
   @IsString()
@@ -8,12 +8,20 @@ export class JoinGameDto {
   @IsString()
   @IsNotEmpty()
   playerName: string;
+
+  @IsString()
+  @IsOptional()
+  avatar?: string;
 }
 
 export class CreateGameDto {
   @IsString()
   @IsNotEmpty()
   hostName: string;
+
+  @IsString()
+  @IsOptional()
+  avatar?: string;
 }
 
 export class AnswerQuestionDto {

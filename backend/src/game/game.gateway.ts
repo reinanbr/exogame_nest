@@ -40,7 +40,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
   ) {
     const hostId = client.id;
-    const game = this.gameService.createGame(hostId, createGameDto.hostName);
+    const game = this.gameService.createGame(hostId, createGameDto.hostName, createGameDto.avatar);
     
     this.connectedClients.set(client.id, hostId);
     client.join(game.id);
@@ -63,10 +63,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
       joinGameDto.gameId,
       playerId,
       joinGameDto.playerName,
+      joinGameDto.avatar,
     );
 
     if (!result) {
-      client.emit('error', { message: 'Não foi possível entrar no jogo' });
+      client.emit('error', { message: 'A sala não existe ou já foi iniciada', type: 'ROOM_NOT_FOUND' });
       return { success: false };
     }
 
@@ -176,6 +177,17 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     const game = this.gameService.getGame(gameId);
     if (game) {
+      const currentQuestion = this.gameService.getCurrentQuestion(gameId);
+      if (currentQuestion) {
+        const answerStats = this.gameService.getAnswerStats(gameId, currentQuestion.id);
+        
+        // Notificar todos sobre estatísticas atualizadas
+        this.server.to(gameId).emit('answerStatsUpdated', {
+          stats: answerStats,
+          questionId: answerDto.questionId,
+        });
+      }
+      
       // Notificar o host que um jogador respondeu
       this.server.to(game.hostId).emit('playerAnswered', {
         playerId,
@@ -207,5 +219,12 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     });
 
     return { success: true };
+  }
+
+  @SubscribeMessage('getAvailableAvatars')
+  handleGetAvailableAvatars(@ConnectedSocket() client: Socket) {
+    const avatars = this.gameService.getAvailableAvatars();
+    client.emit('availableAvatars', { avatars });
+    return { success: true, avatars };
   }
 }

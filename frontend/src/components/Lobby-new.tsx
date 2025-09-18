@@ -37,7 +37,6 @@ export default function Lobby() {
                   }`}
                 >
                   <div className="flex items-center">
-                    <div className="text-2xl mr-3">{p.avatar || '🐻'}</div>
                     <div className={`w-3 h-3 rounded-full mr-3 ${
                       p.isHost ? 'bg-yellow-500' : 'bg-green-500'
                     }`}></div>

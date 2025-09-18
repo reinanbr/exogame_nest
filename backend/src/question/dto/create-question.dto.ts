@@ -13,6 +13,9 @@ export class CreateQuestionDto {
   @Max(3)
   correctAnswer: number;
 
+  @IsString()
+  correctAnswerContext: string;
+
   @IsNumber()
   @Min(5)
   @Max(60)

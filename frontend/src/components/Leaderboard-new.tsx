@@ -68,14 +68,6 @@ export default function Leaderboard() {
               border-color: #F59E0B;
               font-weight: bold;
             }
-            .player-info {
-              display: flex;
-              align-items: center;
-            }
-            .avatar {
-              font-size: 24px;
-              margin-right: 10px;
-            }
             .medal {
               width: 30px;
               height: 30px;
@@ -144,7 +136,6 @@ export default function Leaderboard() {
               return `
                 <div class="player-row ${isWinner ? 'winner' : ''}">
                   <div class="player-info">
-                    <div class="avatar">${player.avatar || '🐻'}</div>
                     <div class="medal">
                       ${index < 3 ? medalEmojis[index] : index + 1}
                     </div>
@@ -216,7 +207,6 @@ export default function Leaderboard() {
                   }`}
                 >
                   <div className="flex items-center">
-                    <div className="text-2xl mr-3">{player.avatar || '🐻'}</div>
                     <div className={`flex items-center justify-center w-8 h-8 rounded-full mr-4 ${
                       index < 3 ? 'bg-white' : 'bg-gray-300'
                     }`}>
